@@ -57,9 +57,9 @@ function useReveal() {
   }, []);
 }
 
-function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
+function Reveal({ children, className = '', delay = 0, id }: { children: ReactNode; className?: string; delay?: number; id?: string }) {
   return (
-    <div data-reveal className={className} style={{ ['--reveal-delay' as string]: delay + 'ms' }}>
+    <div id={id} data-reveal className={className} style={{ ['--reveal-delay' as string]: delay + 'ms' }}>
       {children}
     </div>
   );
@@ -74,7 +74,7 @@ export default function Home() {
 
   useEffect(() => {
     const createPool = (src: string) =>
-      Array.from({ length: 5 }, () => {
+      Array.from({ length: 2 }, () => {
         const audio = new Audio(src);
         audio.preload = 'auto';
         audio.volume = 0.32;
@@ -127,6 +127,10 @@ export default function Home() {
     carouselStartX.current = event.clientX;
   };
 
+  const handleCarouselPointerCancel = () => {
+    carouselStartX.current = null;
+  };
+
   const handleCarouselPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
     if (carouselStartX.current === null) return;
     const delta = event.clientX - carouselStartX.current;
@@ -168,7 +172,7 @@ export default function Home() {
             <a href="#performance">Performance</a>
             <a href="#specs">Specs</a>
           </nav>
-          <a className="nav-buy" href="#buy">Buy</a>
+          <a className="nav-buy" href="#buy-config">Buy</a>
         </div>
       </header>
 
@@ -179,7 +183,7 @@ export default function Home() {
             <h1>Built<br /><span>different.</span></h1>
             <p className="hero-lede">Metal. 140× ultra zoom. A 6.83” 144 Hz AMOLED display. Nothing OS 4.1 with Essential AI tools.</p>
             <div className="hero-actions">
-              <a className="button button-light" href="#buy">Shop Phone (4a) Pro</a>
+              <a className="button button-light" href="#buy-config">Shop Phone (4a) Pro</a>
               <a className="button button-ghost" href="#camera">Explore the system <span>↘</span></a>
             </div>
           </Reveal>
@@ -191,7 +195,7 @@ export default function Home() {
               alt="Nothing Phone (4a) Pro hero product render"
               fill
               priority
-              sizes="(max-width: 820px) 88vw, 52vw"
+              sizes="(max-width: 560px) 96vw, (max-width: 820px) 92vw, 52vw"
               className="hero-base-image"
             />
             <div className="hero-product-label"><span>SILVER / 8 + 128 GB</span><strong>$499</strong></div>
@@ -429,11 +433,13 @@ export default function Home() {
           <Reveal className="spec-gallery" delay={90}>
             <div className="spec-gallery-card">
               <Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" />
-              <span>SPEC / 01</span>
+              <div className="spec-gallery-overlay" aria-hidden="true" />
+              <div className="spec-gallery-meta"><span>SPEC / 01</span><small>FULL TECHNICAL SHEET</small></div>
             </div>
             <div className="spec-gallery-card">
               <Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" />
-              <span>SPEC / 02</span>
+              <div className="spec-gallery-overlay" aria-hidden="true" />
+              <div className="spec-gallery-meta"><span>SPEC / 02</span><small>DETAIL / HARDWARE</small></div>
             </div>
           </Reveal>
         </div>
@@ -485,6 +491,8 @@ export default function Home() {
               aria-label="Phone (4a) Pro colour carousel"
               onPointerDown={handleCarouselPointerDown}
               onPointerUp={handleCarouselPointerUp}
+              onPointerCancel={handleCarouselPointerCancel}
+              onPointerLeave={handleCarouselPointerCancel}
               onKeyDown={(event) => {
                 if (event.key === 'ArrowLeft') changeVariant(-1);
                 if (event.key === 'ArrowRight') changeVariant(1);
@@ -545,7 +553,7 @@ export default function Home() {
             </div>
           </Reveal>
 
-          <Reveal className="config-panel" delay={140}>
+          <Reveal id="buy-config" className="config-panel" delay={140}>
             <div className="config-panel-top">
               <div>
                 <span className="config-eyebrow">PHONE (4a) PRO</span>
