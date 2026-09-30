@@ -69,6 +69,15 @@ function Pill({ children }: { children: ReactNode }) {
   return <span className="pill">{children}</span>;
 }
 
+const scrollToBuy = (event: React.MouseEvent<HTMLAnchorElement>) => {
+  event.preventDefault();
+  const target = document.getElementById('buy-config');
+  if (!target) return;
+  const top = target.getBoundingClientRect().top + window.scrollY - 138;
+  window.history.replaceState(null, '', '#buy-config');
+  window.scrollTo({ top, behavior: 'smooth' });
+};
+
 export default function Home() {
   useReveal();
 
@@ -172,7 +181,7 @@ export default function Home() {
             <a href="#performance">Performance</a>
             <a href="#specs">Specs</a>
           </nav>
-          <a className="nav-buy" href="#buy-config">Buy</a>
+          <a className="nav-buy" href="#buy-config" onClick={scrollToBuy}>Buy</a>
         </div>
       </header>
 
@@ -183,7 +192,7 @@ export default function Home() {
             <h1>Built<br /><span>different.</span></h1>
             <p className="hero-lede">Metal. 140× ultra zoom. A 6.83” 144 Hz AMOLED display. Nothing OS 4.1 with Essential AI tools.</p>
             <div className="hero-actions">
-              <a className="button button-light" href="#buy-config">Shop Phone (4a) Pro</a>
+              <a className="button button-light" href="#buy-config" onClick={scrollToBuy}>Shop Phone (4a) Pro</a>
               <a className="button button-ghost" href="#camera">Explore the system <span>↘</span></a>
             </div>
           </Reveal>
