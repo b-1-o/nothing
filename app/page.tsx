@@ -196,7 +196,6 @@ export default function Home() {
           <div className="camera-feature-grid">
             <Reveal className="visual-card camera-image-card">
               <Image src="/nothing/assets/camera.jpg" alt="Phone (4a) Pro camera hardware" fill sizes="(max-width: 900px) 100vw, 55vw" className="original-image" loading="lazy" />
-              <div className="image-overlay" />
               <div className="visual-caption"><span>PRO 3 CAMERA SYSTEM</span><span>01</span></div>
             </Reveal>
 
@@ -303,7 +302,6 @@ export default function Home() {
           <div className="performance-grid">
             <Reveal className="performance-image">
               <Image src="/nothing/assets/matrix.jpg" alt="Nothing Phone (4a) Pro system visual" fill sizes="(max-width: 900px) 100vw, 52vw" className="original-image" loading="lazy" />
-              <div className="image-overlay dark-overlay" />
               <div className="image-label"><span>QUALCOMM SNAPDRAGON 7 GEN 4</span><span>4 NM</span></div>
             </Reveal>
 
@@ -324,7 +322,6 @@ export default function Home() {
           <div className="battery-grid">
             <Reveal className="battery-image">
               <Image src="/nothing/assets/battery.jpg" alt="Nothing Phone (4a) Pro battery" fill sizes="(max-width: 900px) 100vw, 50vw" className="original-image" loading="lazy" />
-              <div className="image-overlay" />
               <span className="image-label single">50 W FAST CHARGING</span>
             </Reveal>
             <div className="battery-facts">
