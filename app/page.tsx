@@ -114,7 +114,9 @@ export default function Home() {
 
   const [variant, setVariant] = useState(0);
   const [capacity, setCapacity] = useState(0);
+  const [activeSpec, setActiveSpec] = useState(0);
   const selected = variants[variant];
+  const activeSpecData = specs[activeSpec];
   const carouselStartX = useRef<number | null>(null);
 
   const changeVariant = (direction: number) => {
@@ -392,19 +394,34 @@ export default function Home() {
             </div>
           </Reveal>
 
-          <Reveal className="spec-command" delay={100}>
-            <div className="spec-command-top">
-              <span>TECHNICAL OVERVIEW</span>
-              <span>PHONE (4a) PRO / 2026</span>
+          <Reveal className="spec-selector" delay={100}>
+            <div className="spec-selector-top">
+              <div>
+                <span>TECHNICAL OVERVIEW</span>
+                <strong>PHONE (4a) PRO / 2026</strong>
+              </div>
+              <div className="spec-live-index"><span>SELECTED</span><strong>{String(activeSpec + 1).padStart(2,'0')} / 14</strong></div>
             </div>
-            <div className="spec-command-grid">
-              {specs.map(([label, main, detail], index) => (
-                <div className="spec-command-row" key={label}>
-                  <span className="spec-command-index">0{index + 1}</span>
-                  <span className="spec-command-label">{label}</span>
-                  <strong>{main}</strong>
-                  <small>{detail}</small>
-                </div>
+
+            <div className="spec-focus">
+              <span>{activeSpecData[0]}</span>
+              <strong>{activeSpecData[1]}</strong>
+              <p>{activeSpecData[2]}</p>
+            </div>
+
+            <div className="spec-nav" role="tablist" aria-label="Phone specifications">
+              {specs.map(([label], index) => (
+                <button
+                  key={label}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeSpec === index}
+                  className={'spec-nav-item ' + (activeSpec === index ? 'active' : '')}
+                  onClick={() => setActiveSpec(index)}
+                >
+                  <span>{String(index + 1).padStart(2,'0')}</span>
+                  <strong>{label}</strong>
+                </button>
               ))}
             </div>
           </Reveal>
