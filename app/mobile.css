@@ -6,15 +6,11 @@
   .section { padding: 82px 0; }
   h2 { font-size: clamp(46px, 15vw, 70px); line-height: .9; letter-spacing: -.07em; }
   .muted-copy { max-width: 100%; font-size: 14px; line-height: 1.65; }
-
-  /* Navigation */
   .site-nav { padding: 12px 0; }
   .nav-inner { width: calc(100% - 28px); min-width: 0; }
   .desktop-nav { display: none; }
   .wordmark { font-size: 12px; }
   .nav-buy { min-width: 50px; padding: 8px 11px; }
-
-  /* Hero */
   .hero { min-height: 760px; overflow: hidden; }
   .hero-content { min-height: 720px; display: flex !important; flex-direction: column; justify-content: flex-start; gap: 8px; padding-top: 108px; position: relative; }
   .hero-copy { position: relative !important; z-index: 4; width: 100% !important; max-width: 330px; }
@@ -22,16 +18,13 @@
   .hero-lede { max-width: 290px; font-size: 13px; line-height: 1.55; }
   .hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .hero-actions .button { min-height: 42px; padding: 0 13px; font-size: 10px; }
-  .hero-product { position: absolute !important; z-index: 2; left: 50% !important; right: auto !important; top: 285px !important; bottom: auto !important; width: min(520px, 145vw) !important; height: 470px !important; transform: translateX(-50%) !important; }
+  .hero-actions .button-ghost span { display: none !important; }
+  .hero-product { position: absolute !important; z-index: 2; left: calc(50% - 16px) !important; right: auto !important; top: 320px !important; bottom: auto !important; width: min(520px, 145vw) !important; height: 470px !important; transform: translateX(-50%) !important; }
   .hero-base-image { object-fit: contain !important; object-position: center !important; width: 100% !important; height: 100% !important; }
   .hero-product-glow { transform: scale(.78); }
   .hero-product-label { left: 16px !important; right: 16px !important; bottom: 6px !important; }
   .hero-bottom { position: absolute; bottom: 18px; left: 14px; right: 14px; width: auto; font-size: 8px; }
-
-  /* Global MicroSlats stays full-bleed without creating page width. */
   .global-micro-bg, .hero-micro-bg { width: 100%; max-width: 100vw; overflow: hidden; }
-
-  /* Camera */
   .section-intro { grid-template-columns: 1fr; gap: 28px; margin-bottom: 42px; }
   .section-intro-copy { max-width: 100%; justify-self: stretch; }
   .camera-feature-grid { grid-template-columns: 1fr; gap: 22px; }
@@ -47,14 +40,10 @@
   .camera-anatomy-grid { grid-template-columns: 1fr !important; gap: 12px !important; }
   .anatomy-card { min-height: 250px !important; width: 100% !important; }
   .anatomy-card .original-image { object-fit: contain !important; background: #111216; padding: 10px; }
-
-  /* Interface / MicroSlats */
   .slats-section { min-height: 0; }
   .slats-layout { grid-template-columns: 1fr; gap: 30px; }
   .slats-demo { min-height: 360px; }
   .slats-callout { width: 100%; }
-
-  /* Display */
   .display-layout { grid-template-columns: 1fr; gap: 38px; }
   .display-copy { max-width: 100%; }
   .display-metrics { gap: 16px; justify-content: space-between; margin-top: 30px; }
@@ -63,28 +52,20 @@
   .display-visual { width: 100%; overflow: hidden; }
   .display-art { width: min(100%, 350px) !important; height: min(560px, 145vw) !important; margin: 0 auto; }
   .display-art-image { object-fit: contain !important; object-position: center !important; }
-
-  /* Lifestyle */
   .lifestyle-grid { grid-template-columns: 1fr !important; gap: 28px !important; }
   .lifestyle-visual { min-height: 420px !important; width: 100% !important; }
   .lifestyle-visual .original-image { object-fit: cover !important; object-position: center; }
-
-  /* Performance */
   .performance-grid { grid-template-columns: 1fr; gap: 28px; }
   .performance-image { min-height: 360px; }
   .performance-image .original-image { object-fit: contain !important; background: #111216; }
   .perf-row { grid-template-columns: 62px minmax(0,1fr); column-gap: 12px; }
   .perf-row > strong { font-size: 17px; }
-
-  /* Battery */
   .battery-section { padding-top: 82px; padding-bottom: 82px; }
   .battery-grid { grid-template-columns: 1fr; gap: 28px; margin-top: 40px; }
   .battery-image { min-height: 390px; }
   .battery-image .original-image { object-fit: contain !important; background: #111216; }
   .battery-number strong { font-size: clamp(74px, 21vw, 112px); }
   .battery-rule { grid-template-columns: 62px minmax(0,1fr); column-gap: 12px; }
-
-  /* Specs: turn the large desktop table into a readable mobile stack. */
   .specs-header { grid-template-columns: 1fr !important; gap: 24px !important; }
   .spec-hero { grid-template-columns: 1fr !important; gap: 22px !important; padding: 22px !important; }
   .spec-hero-number strong { font-size: clamp(74px, 23vw, 120px) !important; }
@@ -96,14 +77,10 @@
   .spec-gallery { grid-template-columns: 1fr !important; gap: 14px !important; }
   .spec-gallery-card { min-height: 300px !important; width: 100% !important; }
   .spec-gallery-card .original-image { object-fit: contain !important; background: #d8d8d5; padding: 8px; }
-
-  /* In the box */
   .box-header { margin-bottom: 34px !important; }
   .box-items { grid-template-columns: 1fr !important; }
   .box-card { min-height: 84px !important; padding: 15px !important; }
   .box-card-body strong { font-size: 14px !important; }
-
-  /* Buy / colour carousel */
   .buy-shell { width: calc(100% - 28px); }
   .phone-carousel { width: 100%; }
   .phone-carousel-stage { width: 100% !important; height: min(470px, 125vw) !important; overflow: hidden !important; touch-action: pan-y; }
@@ -125,8 +102,6 @@
   .config-storage button { min-height: 50px; }
   .config-bottom { grid-template-columns: 1fr !important; gap: 12px !important; }
   .buy-cta { width: 100%; text-align: center; }
-
-  /* Prevent every media/query combination from widening the viewport. */
   .visual-card, .performance-image, .battery-image, .spec-gallery-card, .box-visual,
   .camera-anatomy, .camera-anatomy-grid, .spec-gallery, .box-showcase, .buy-section,
   .phone-carousel, .config-panel, .lifestyle-visual { max-width: 100%; min-width: 0; }
@@ -137,7 +112,7 @@
   .shell, .nav-inner, .buy-shell { width: calc(100% - 22px); }
   .hero { min-height: 720px; }
   .hero-content { min-height: 685px; padding-top: 96px; }
-  .hero-product { top: 280px !important; width: 150vw !important; height: 410px !important; }
+  .hero-product { top: 315px !important; left: calc(50% - 16px) !important; width: 150vw !important; height: 410px !important; }
   .hero-copy { max-width: 305px; }
   .hero-lede { font-size: 12px; max-width: 270px; }
   .camera-image-card, .lifestyle-visual, .performance-image, .battery-image { min-height: 330px; }
