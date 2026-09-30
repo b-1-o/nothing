@@ -185,12 +185,12 @@ export default function Home() {
           <Reveal delay={130} className="hero-product">
             <div className="hero-product-glow" />
             <Image
-              src="/nothing/assets/white_back_and_front.png"
-              alt="Nothing Phone (4a) Pro silver front and back"
+              src="/nothing/assets/base pic rm bg.png"
+              alt="Nothing Phone (4a) Pro hero product render"
               fill
               priority
-              sizes="(max-width: 820px) 82vw, 44vw"
-              className="original-image product-switch"
+              sizes="(max-width: 820px) 88vw, 52vw"
+              className="hero-base-image"
             />
             <div className="hero-product-label"><span>SILVER / 8 + 128 GB</span><strong>$499</strong></div>
           </Reveal>
@@ -296,13 +296,15 @@ export default function Home() {
             </div>
           </Reveal>
           <Reveal className="display-visual" delay={120}>
-            <div className="screen-shell">
-              <div className="screen-reflection" />
-              <div className="screen-core">
-                <span className="screen-number">144</span>
-                <span className="screen-unit">HZ</span>
-                <span className="screen-sub">ADAPTIVE REFRESH</span>
-              </div>
+            <div className="display-art">
+              <Image
+                src="/nothing/assets/screenhz.png"
+                alt="Nothing Phone (4a) Pro display showing 144 Hz"
+                fill
+                sizes="(max-width: 820px) 88vw, 48vw"
+                className="display-art-image"
+                loading="lazy"
+              />
             </div>
           </Reveal>
         </div>
