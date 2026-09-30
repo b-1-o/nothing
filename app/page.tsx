@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState, useRef, type ReactNode } from 'react';
+import { useEffect, useState, type ReactNode } from 'react';
 import MicroSlats from '../components/MicroSlats';
 
 const variants = [
@@ -141,6 +141,35 @@ export default function Home() {
       </header>
 
       <section id="top" className="hero">
+        <div className="shell hero-content">
+          <Reveal className="hero-copy">
+            <div className="hero-kicker"><span>PHONE (4a) PRO</span><span>01 / 09</span></div>
+            <h1>Built<br /><span>different.</span></h1>
+            <p className="hero-lede">Metal. 140× ultra zoom. A 6.83” 144 Hz AMOLED display. Nothing OS 4.1 with Essential AI tools.</p>
+            <div className="hero-actions">
+              <a className="button button-light" href="#buy">Shop Phone (4a) Pro</a>
+              <a className="button button-ghost" href="#camera">Explore the system <span>↘</span></a>
+            </div>
+          </Reveal>
+
+          <Reveal delay={130} className="hero-product">
+            <div className="hero-product-glow" />
+            <Image
+              src="/nothing/assets/white_back_and_front.png"
+              alt="Nothing Phone (4a) Pro silver front and back"
+              fill
+              priority
+              sizes="(max-width: 820px) 82vw, 44vw"
+              className="original-image product-switch"
+            />
+            <div className="hero-product-label"><span>SILVER / 8 + 128 GB</span><strong>$499</strong></div>
+          </Reveal>
+        </div>
+
+        <div className="hero-bottom shell">
+          <span>Scroll to explore</span>
+          <span>MicroSlats · Global field</span>
+        </div>
       </section>
 
       <section className="marquee" aria-label="Key specifications">
