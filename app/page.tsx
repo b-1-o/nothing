@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import MicroSlats from '../components/MicroSlats';
 
 const variants = [
@@ -73,7 +73,7 @@ export default function Home() {
   useReveal();
 
   useEffect(() => {
-    const src = '/nothing/assets/Cough_Nothing_Phone_2_Stock_Notification-649463-mobiles24.mp3';
+    const src = '/nothing/assets/Squiggle_Nothing_Phone_1_Stock_Notification-645458-mobiles24.mp3';
     const pool = Array.from({ length: 5 }, () => {
       const audio = new Audio(src);
       audio.preload = 'auto';
@@ -101,6 +101,22 @@ export default function Home() {
   const [variant, setVariant] = useState(0);
   const [capacity, setCapacity] = useState(0);
   const selected = variants[variant];
+  const carouselStartX = useRef<number | null>(null);
+
+  const changeVariant = (direction: number) => {
+    setVariant((current) => (current + direction + variants.length) % variants.length);
+  };
+
+  const handleCarouselPointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
+    carouselStartX.current = event.clientX;
+  };
+
+  const handleCarouselPointerUp = (event: React.PointerEvent<HTMLDivElement>) => {
+    if (carouselStartX.current === null) return;
+    const delta = event.clientX - carouselStartX.current;
+    carouselStartX.current = null;
+    if (Math.abs(delta) > 48) changeVariant(delta < 0 ? 1 : -1);
+  };
 
   return (
     <main>
@@ -373,45 +389,134 @@ export default function Home() {
       </section>
 
       <section id="buy" className="buy-section">
-        <div className="shell buy-layout">
-          <Reveal className="buy-copy">
+        <div className="shell buy-shell">
+          <Reveal className="buy-heading">
             <p className="section-index">09 — Choose yours</p>
             <h2>Make it<br /><em>yours.</em></h2>
-            <p>Phone (4a) Pro starts at $499. Choose a finish, then choose the memory configuration.</p>
-            <div className="swatches" role="radiogroup" aria-label="Colours">
+            <p>Phone (4a) Pro starts at $499. Swipe through the finishes, then configure the memory below.</p>
+          </Reveal>
+
+          <Reveal className="phone-carousel" delay={90}>
+            <div
+              className="phone-carousel-stage"
+              tabIndex={0}
+              role="region"
+              aria-label="Phone (4a) Pro colour carousel"
+              onPointerDown={handleCarouselPointerDown}
+              onPointerUp={handleCarouselPointerUp}
+              onKeyDown={(event) => {
+                if (event.key === 'ArrowLeft') changeVariant(-1);
+                if (event.key === 'ArrowRight') changeVariant(1);
+              }}
+            >
+              {variants.map((item, index) => {
+                const offset = (index - variant + variants.length) % variants.length;
+                const position = offset === 0 ? 'current' : offset === 1 ? 'next' : 'prev';
+                return (
+                  <div
+                    key={item.name}
+                    className={'phone-slide ' + position}
+                    aria-hidden={offset !== 0}
+                  >
+                    <Image
+                      src={item.image}
+                      alt={item.name + ' Phone (4a) Pro front and back'}
+                      fill
+                      sizes="(max-width: 760px) 88vw, 58vw"
+                      className="phone-carousel-image"
+                    />
+                  </div>
+                );
+              })}
+
+              <button
+                type="button"
+                className="carousel-arrow carousel-prev"
+                aria-label="Previous colour"
+                onClick={() => changeVariant(-1)}
+              >←</button>
+              <button
+                type="button"
+                className="carousel-arrow carousel-next"
+                aria-label="Next colour"
+                onClick={() => changeVariant(1)}
+              >→</button>
+
+              <div className="carousel-index"><span>COLOUR</span><strong>0{variant + 1} / 03</strong></div>
+              <div className="carousel-hint">DRAG OR USE ARROWS</div>
+            </div>
+
+            <div className="colour-rail" role="tablist" aria-label="Phone colours">
               {variants.map((item, index) => (
-                <button key={item.name} type="button" className={'swatch ' + (variant === index ? 'active' : '')} onClick={() => setVariant(index)} aria-pressed={variant === index}>
-                  <span className={'swatch-dot swatch-' + item.name.toLowerCase()} />{item.name}
+                <button
+                  key={item.name}
+                  type="button"
+                  role="tab"
+                  aria-selected={variant === index}
+                  className={'colour-tab ' + (variant === index ? 'active' : '')}
+                  onClick={() => setVariant(index)}
+                >
+                  <span className={'swatch-dot swatch-' + item.name.toLowerCase()} />
+                  <span>{item.name}</span>
+                  <small>{item.note.replace(' finish', '')}</small>
                 </button>
               ))}
             </div>
           </Reveal>
 
-          <Reveal className="buy-card" delay={100}>
-            <div className="buy-image">
-              <Image
-                key={selected.image}
-                src={selected.image}
-                alt={selected.name + ' Phone (4a) Pro front and back'}
-                fill
-                sizes="(max-width: 900px) 72vw, 30vw"
-                className="product-image contain-image product-switch"
-                loading="lazy"
-              />
+          <Reveal className="config-panel" delay={140}>
+            <div className="config-panel-top">
+              <div>
+                <span className="config-eyebrow">PHONE (4a) PRO</span>
+                <strong>{selected.name}</strong>
+              </div>
+              <div className="config-price">{selected.price}</div>
             </div>
-            <div className="buy-product-title">
-              <div><span>PHONE (4a) PRO</span><strong>{selected.name}</strong></div>
-              <span className="buy-price">{selected.price}</span>
+
+            <div className="config-divider" />
+
+            <div className="config-row">
+              <div className="config-label">
+                <span>FINISH</span>
+                <strong>{selected.name}</strong>
+              </div>
+              <div className="config-value finish-value">
+                <span className={'swatch-dot swatch-' + selected.name.toLowerCase()} />
+                <span>{selected.note}</span>
+              </div>
             </div>
-            <p className="buy-note">{selected.note}</p>
-            <div className="capacity-grid" role="radiogroup" aria-label="Storage">
-              {capacities.map((item, index) => (
-                <button key={item} type="button" className={capacity === index ? 'selected' : ''} onClick={() => setCapacity(index)} aria-pressed={capacity === index}>{item}</button>
-              ))}
+
+            <div className="config-row config-storage-row">
+              <div className="config-label">
+                <span>MEMORY</span>
+                <strong>Choose configuration</strong>
+              </div>
+              <div className="config-storage">
+                {capacities.map((item, index) => (
+                  <button
+                    key={item}
+                    type="button"
+                    className={capacity === index ? 'selected' : ''}
+                    onClick={() => setCapacity(index)}
+                    aria-pressed={capacity === index}
+                  >
+                    <span>{item.split(' + ')[0]}</span>
+                    <small>{item.split(' + ')[1]}</small>
+                  </button>
+                ))}
+              </div>
             </div>
-            <div className="buy-summary"><span>{selected.name} · {capacities[capacity]}</span><strong>{selected.price}</strong></div>
-            <a className="buy-cta" href="https://us.nothing.tech/products/phone-4a-pro" target="_blank" rel="noopener noreferrer">Add to bag <span>↗</span></a>
-            <small className="buy-disclaimer">External purchase link · pricing and availability may change.</small>
+
+            <div className="config-bottom">
+              <div className="config-summary">
+                <span>{selected.name} · {capacities[capacity]}</span>
+                <strong>{selected.price}</strong>
+              </div>
+              <a className="buy-cta" href="https://us.nothing.tech/products/phone-4a-pro" target="_blank" rel="noopener noreferrer">
+                Add to bag <span>↗</span>
+              </a>
+              <small className="buy-disclaimer">External purchase link · pricing and availability may change.</small>
+            </div>
           </Reveal>
         </div>
       </section>
