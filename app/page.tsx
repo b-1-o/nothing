@@ -5,9 +5,9 @@ import { useEffect, useState, type ReactNode } from 'react';
 import MicroSlats from '../components/MicroSlats';
 
 const variants = [
-  { name: 'Silver', price: '$499', note: 'Default finish' },
-  { name: 'Black', price: '$499', note: 'Deep black finish' },
-  { name: 'Pink', price: '$499', note: 'Soft pink finish' }
+  { name: 'Silver', price: '$499', note: 'White / silver finish', image: '/nothing/assets/white_back_and_front.png' },
+  { name: 'Black', price: '$499', note: 'Deep black finish', image: '/nothing/assets/black_front_and_back.png' },
+  { name: 'Pink', price: '$499', note: 'Soft pink finish', image: '/nothing/assets/pink_front_and_back.png' }
 ];
 
 const capacities = ['8GB + 128GB', '8GB + 256GB', '12GB + 256GB'];
@@ -91,42 +91,29 @@ export default function Home() {
       </header>
 
       <section id="top" className="hero">
-        <div className="hero-bg">
-          <Image
-            src="/nothing/assets/beckground.jpg"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className="cover-image hero-bg-image"
-          />
-          <div className="hero-vignette" />
-          <div className="hero-grain" />
-        </div>
-
-        <div className="hero-slats" aria-hidden="true">
+        <div className="hero-micro-bg" aria-hidden="true">
           <MicroSlats
             preset="swell"
-            color="#8f9196"
+            color="#9f9898"
             glintColor="#ffffff"
-            backgroundColor="transparent"
+            backgroundColor="#090909"
             slatWidth={10}
-            slatHeight={11}
-            gap={2}
-            roundness={0.8}
-            speed={0.28}
-            glint={0.58}
-            contrast={1.15}
-            perspective={0.72}
-            fog={0.78}
+            slatHeight={15}
+            gap={1}
+            roundness={1}
             interactive
-            cursorStrength={0.7}
-            cursorSize={46}
-            trail={1.1}
-            lean={0.12}
-            intro
-            introDuration={1.1}
+            cursorStrength={1}
+            cursorSize={40}
+            swirl={0}
+            trail={1.2}
+            lean={0}
+            intro={false}
+            direction={129}
+            chop={0}
+            fog={0.7}
+            introDuration={0.6}
           />
+          <div className="hero-micro-shade" />
         </div>
 
         <div className="shell hero-content">
@@ -147,27 +134,28 @@ export default function Home() {
             </Reveal>
           </div>
 
-          <Reveal delay={220} className="hero-product">
-            <div className="hero-device-glow" />
-            <div className="hero-device">
+          <Reveal delay={130} className="hero-girl">
+            <div className="hero-girl-frame">
               <Image
-                src="/nothing/assets/phone back and front.jpg"
-                alt="Nothing Phone (4a) Pro front and back"
+                src="/nothing/assets/girl with a phone.jpg"
+                alt="Woman using a Nothing Phone"
                 fill
                 priority
-                sizes="(max-width: 760px) 72vw, 44vw"
-                className="product-image contain-image"
+                sizes="(max-width: 760px) 92vw, 58vw"
+                className="hero-girl-image"
               />
+              <div className="hero-girl-mask" />
             </div>
-            <div className="hero-product-label">
-              <span>{selected.name}</span><strong>140×</strong><small>ultra zoom</small>
+            <div className="hero-girl-meta">
+              <span>01 / PHONE (4a) PRO</span>
+              <strong>Nothing, in motion.</strong>
             </div>
           </Reveal>
         </div>
 
         <div className="hero-bottom shell">
           <span>Scroll to explore</span>
-          <span>Nothing · 2026</span>
+          <span>MicroSlats · Live field</span>
         </div>
       </section>
 
@@ -353,7 +341,7 @@ export default function Home() {
               ))}
             </div>
             <Reveal className="box-visual" delay={100}>
-              <Image src="/nothing/assets/phone back and front.jpg" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 100vw, 44vw" className="product-image contain-image" loading="lazy" />
+              <Image src="/nothing/assets/white_back_and_front.png" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 100vw, 44vw" className="product-image contain-image" loading="lazy" />
             </Reveal>
           </div>
         </div>
@@ -375,7 +363,17 @@ export default function Home() {
           </Reveal>
 
           <Reveal className="buy-card" delay={100}>
-            <div className="buy-image"><Image src="/nothing/assets/phone back and front.jpg" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 72vw, 30vw" className="product-image contain-image" loading="lazy" /></div>
+            <div className="buy-image">
+              <Image
+                key={selected.image}
+                src={selected.image}
+                alt={selected.name + ' Phone (4a) Pro front and back'}
+                fill
+                sizes="(max-width: 900px) 72vw, 30vw"
+                className="product-image contain-image product-switch"
+                loading="lazy"
+              />
+            </div>
             <div className="buy-product-title">
               <div><span>PHONE (4a) PRO</span><strong>{selected.name}</strong></div>
               <span className="buy-price">{selected.price}</span>
