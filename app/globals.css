@@ -915,3 +915,6 @@ main > footer {
     animation: none;
   }
 }
+
+
+.contain-image { object-fit: contain !important; object-position: center !important; }
