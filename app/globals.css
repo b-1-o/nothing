@@ -1664,3 +1664,249 @@ main > footer {
   .spec-focus { min-height:175px; padding:24px 18px; }
   .spec-focus > strong { font-size:32px; }
 }
+
+
+/* Performance + responsive pass: preserve motion and visual depth while reducing offscreen work. */
+html {
+  scroll-padding-top: 82px;
+  -webkit-tap-highlight-color: transparent;
+}
+body {
+  overflow-x: hidden;
+}
+.section-dark,
+.slats-section,
+.display-section,
+.lifestyle-section,
+.performance-section,
+.battery-section,
+.specs-section,
+.box-section {
+  content-visibility: auto;
+  contain-intrinsic-size: 900px;
+}
+#buy-config {
+  scroll-margin-top: 82px;
+}
+.spec-gallery-card {
+  background: #d7d7d4;
+  box-shadow:
+    0 24px 60px rgba(0,0,0,.16),
+    inset 0 1px 0 rgba(255,255,255,.72);
+}
+.spec-gallery-card .original-image {
+  filter: grayscale(1) contrast(1.06) brightness(.84);
+  transform: scale(1.001);
+  transition: transform .55s cubic-bezier(.2,.8,.2,1), filter .4s ease;
+}
+.spec-gallery-card:hover .original-image {
+  filter: grayscale(1) contrast(1.12) brightness(.96);
+  transform: scale(1.025);
+}
+.spec-gallery-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0,0,0,.12), transparent 24%, transparent 68%, rgba(0,0,0,.48)),
+    linear-gradient(110deg, rgba(255,255,255,.14), transparent 30%);
+}
+.spec-gallery-meta {
+  position: absolute;
+  left: 17px;
+  right: 17px;
+  bottom: 16px;
+  z-index: 2;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: #f1f1ef;
+  text-shadow: 0 1px 12px rgba(0,0,0,.38);
+}
+.spec-gallery-meta span {
+  padding: 7px 9px;
+  border: 1px solid rgba(255,255,255,.28);
+  border-radius: 999px;
+  background: rgba(0,0,0,.28);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  font-size: 8px;
+  letter-spacing: .16em;
+}
+.spec-gallery-meta small {
+  font-size: 8px;
+  letter-spacing: .14em;
+  opacity: .78;
+}
+
+/* Keep the oversized hero product dramatic, but give smaller screens more breathing room. */
+.hero-product {
+  overflow: visible;
+}
+.hero-product .hero-base-image {
+  max-width: none !important;
+}
+
+/* Touch-first refinements. */
+@media (max-width:820px) {
+  .section { padding: 96px 0; }
+  .nav-inner { min-height: 42px; }
+  .nav-buy { min-height: 40px; display: inline-flex; align-items: center; justify-content: center; }
+  .hero-content {
+    min-height: 930px;
+    padding-top: 96px;
+    padding-bottom: 58px;
+  }
+  .hero-product {
+    min-height: 540px;
+    margin-top: -18px;
+  }
+  .hero-product-label {
+    right: 3%;
+    bottom: 3%;
+  }
+  .camera-image-card { min-height: 500px; }
+  .camera-anatomy-grid { gap: 12px; }
+  .anatomy-card { min-height: 350px; }
+  .display-layout { gap: 46px; }
+  .display-metrics {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0,1fr));
+    gap: 14px;
+  }
+  .performance-image,
+  .battery-image { min-height: 430px; }
+  .spec-hero { min-height: 500px; }
+  .spec-gallery { gap: 12px; }
+  .buy-shell { gap: 22px; }
+  .phone-carousel-stage { min-height: 590px; border-radius: 30px; }
+  .phone-slide { inset: 6% 5%; }
+  .config-panel,
+  .colour-tab,
+  .spec-selector,
+  .slats-callout {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+}
+
+@media (max-width:560px) {
+  .shell,
+  .nav-inner { width: calc(100% - 24px); }
+  .section { padding: 78px 0; }
+  h2 { letter-spacing: -.06em; }
+  .hero,
+  .hero-content { min-height: 920px; }
+  .hero-content {
+    width: calc(100% - 24px);
+    padding-top: 76px;
+    padding-bottom: 44px;
+  }
+  .hero-copy { padding-top: 16px; }
+  .hero-kicker {
+    margin-bottom: 22px;
+    font-size: 8px;
+  }
+  .hero-lede {
+    margin-top: 26px;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+  .hero-actions {
+    margin-top: 24px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .button { min-height: 50px; width: 100%; }
+  .hero-product {
+    min-height: 470px;
+    margin-top: -8px;
+  }
+  .hero-product-label {
+    right: 0;
+    bottom: 1%;
+  }
+  .hero-product-label strong { font-size: 20px; }
+  .hero-bottom {
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .camera-image-card { min-height: 390px; }
+  .camera-stats { gap: 22px; }
+  .camera-detail strong { font-size: 20px; }
+  .anatomy-card { min-height: 280px; aspect-ratio: 4 / 3; }
+  .display-metrics {
+    grid-template-columns: repeat(2, minmax(0,1fr));
+  }
+  .display-metrics div:last-child { grid-column: 1 / -1; }
+  .display-art {
+    aspect-ratio: 4 / 3;
+    border-radius: 20px;
+  }
+  .performance-image,
+  .battery-image { min-height: 330px; }
+  .battery-number { padding-bottom: 30px; }
+  .battery-rule { padding: 18px 0; }
+  .spec-hero {
+    min-height: 500px;
+    padding: 20px;
+  }
+  .spec-orbit {
+    left: 64%;
+    top: 34%;
+    width: 290px;
+    opacity: .72;
+  }
+  .spec-hero-number strong { font-size: 84px; }
+  .spec-hero-side { gap: 7px; }
+  .spec-hero-side > div { min-height: 60px; padding: 0 13px; }
+  .spec-hero-side strong { font-size: 14px; }
+  .spec-focus {
+    min-height: 165px;
+    padding: 22px 18px;
+  }
+  .spec-focus > strong { font-size: 30px; }
+  .spec-focus > p { font-size: 11px; }
+  .spec-gallery-card { min-height: 260px; }
+  .spec-gallery-meta {
+    left: 11px;
+    right: 11px;
+    bottom: 11px;
+  }
+  .spec-gallery-meta small { display: none; }
+  .phone-carousel-stage {
+    min-height: 500px;
+    border-radius: 24px;
+  }
+  .phone-slide { inset: 7% 1%; }
+  .carousel-arrow { width: 46px; height: 46px; }
+  .colour-tab {
+    min-height: 64px;
+    border-radius: 16px;
+    grid-template-columns: auto 1fr;
+  }
+  .colour-tab > small { grid-column: 2; margin-top: -6px; }
+  .config-panel {
+    padding: 16px;
+    border-radius: 22px;
+  }
+  .config-divider { margin: 17px 0; }
+  .config-row { padding: 16px 0; }
+  .config-storage button { min-height: 52px; }
+  .buy-cta { min-height: 56px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-product-glow,
+  .marquee-track,
+  .spec-orbit {
+    animation: none !important;
+  }
+  .hero-product .hero-base-image,
+  .spec-gallery-card .original-image,
+  .phone-slide {
+    transition-duration: .01ms !important;
+  }
+}
