@@ -1668,7 +1668,7 @@ main > footer {
 
 /* Performance + responsive pass: preserve motion and visual depth while reducing offscreen work. */
 html {
-  scroll-padding-top: 82px;
+  scroll-padding-top: 62px;
   -webkit-tap-highlight-color: transparent;
 }
 body {
@@ -1686,7 +1686,7 @@ body {
   contain-intrinsic-size: 900px;
 }
 #buy-config {
-  scroll-margin-top: 82px;
+  scroll-margin-top: 62px;
 }
 .spec-gallery-card {
   background: #d7d7d4;
