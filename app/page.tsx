@@ -73,25 +73,39 @@ export default function Home() {
   useReveal();
 
   useEffect(() => {
-    const src = '/nothing/assets/Squiggle_Nothing_Phone_1_Stock_Notification-645458-mobiles24.mp3';
-    const pool = Array.from({ length: 5 }, () => {
-      const audio = new Audio(src);
-      audio.preload = 'auto';
-      audio.volume = 0.32;
-      return audio;
-    });
-    let cursor = 0;
-    const playClick = () => {
-      const audio = pool[cursor % pool.length];
-      cursor += 1;
+    const createPool = (src: string) =>
+      Array.from({ length: 5 }, () => {
+        const audio = new Audio(src);
+        audio.preload = 'auto';
+        audio.volume = 0.32;
+        return audio;
+      });
+
+    const coughPool = createPool('/nothing/assets/Cough_Nothing_Phone_2_Stock_Notification-649463-mobiles24.mp3');
+    const squigglePool = createPool('/nothing/assets/Squiggle_Nothing_Phone_1_Stock_Notification-645458-mobiles24.mp3');
+    const playFrom = (pool: HTMLAudioElement[], cursorRef: { value: number }) => {
+      const audio = pool[cursorRef.value % pool.length];
+      cursorRef.value += 1;
       audio.currentTime = 0;
       void audio.play().catch(() => undefined);
     };
 
-    document.addEventListener('click', playClick, true);
+    const coughIndex = { value: 0 };
+    const squiggleIndex = { value: 0 };
+    const onDocumentClick = (event: MouseEvent) => {
+      if ((event.target as Element | null)?.closest('[data-buy-sound-zone]')) return;
+      playFrom(coughPool, coughIndex);
+    };
+    const buyZone = document.querySelector<HTMLElement>('[data-buy-sound-zone]');
+    const onBuyClick = () => playFrom(squigglePool, squiggleIndex);
+
+    document.addEventListener('click', onDocumentClick, true);
+    buyZone?.addEventListener('click', onBuyClick);
+
     return () => {
-      document.removeEventListener('click', playClick, true);
-      pool.forEach((audio) => {
+      document.removeEventListener('click', onDocumentClick, true);
+      buyZone?.removeEventListener('click', onBuyClick);
+      [...coughPool, ...squigglePool].forEach((audio) => {
         audio.pause();
         audio.src = '';
       });
@@ -388,7 +402,7 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="buy" className="buy-section">
+      <section id="buy" className="buy-section" data-buy-sound-zone>
         <div className="shell buy-shell">
           <Reveal className="buy-heading">
             <p className="section-index">09 — Choose yours</p>
