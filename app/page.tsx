@@ -369,38 +369,86 @@ export default function Home() {
       <section id="specs" className="section specs-section">
         <div className="shell">
           <Reveal className="specs-header">
-            <div><p className="section-index">07 — Specs</p><h2>The numbers<br /><em>behind the object.</em></h2></div>
+            <div>
+              <p className="section-index">07 — Specs</p>
+              <h2>The numbers<br /><em>behind the object.</em></h2>
+            </div>
             <p className="muted-copy">A compact technical view of the Phone (4a) Pro, using the supplied product specification.</p>
           </Reveal>
 
-          <div className="specs-table">
-            {specs.map(([label, main, detail], index) => (
-              <Reveal className="spec-row" key={label} delay={Math.min(index * 25, 250)}>
-                <span>{label}</span><strong>{main}</strong><small>{detail}</small>
-              </Reveal>
-            ))}
-          </div>
+          <Reveal className="spec-hero" delay={50}>
+            <div className="spec-orbit" aria-hidden="true">
+              <span /><span /><span />
+            </div>
+            <div className="spec-hero-number">
+              <span>DISPLAY</span>
+              <strong>6.83</strong>
+              <em>″ AMOLED</em>
+            </div>
+            <div className="spec-hero-side">
+              <div><span>REFRESH</span><strong>144 Hz</strong></div>
+              <div><span>PEAK</span><strong>5000 nits</strong></div>
+              <div><span>BATTERY</span><strong>5080 mAh</strong></div>
+            </div>
+          </Reveal>
 
-          <Reveal className="spec-gallery" delay={70}>
-            <div className="spec-gallery-card"><Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" /></div>
-            <div className="spec-gallery-card"><Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" /></div>
+          <Reveal className="spec-command" delay={100}>
+            <div className="spec-command-top">
+              <span>TECHNICAL OVERVIEW</span>
+              <span>PHONE (4a) PRO / 2026</span>
+            </div>
+            <div className="spec-command-grid">
+              {specs.map(([label, main, detail], index) => (
+                <div className="spec-command-row" key={label}>
+                  <span className="spec-command-index">0{index + 1}</span>
+                  <span className="spec-command-label">{label}</span>
+                  <strong>{main}</strong>
+                  <small>{detail}</small>
+                </div>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal className="spec-gallery" delay={90}>
+            <div className="spec-gallery-card">
+              <Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" />
+              <span>SPEC / 01</span>
+            </div>
+            <div className="spec-gallery-card">
+              <Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" />
+              <span>SPEC / 02</span>
+            </div>
           </Reveal>
         </div>
       </section>
 
       <section className="section box-section">
         <div className="shell">
-          <Reveal className="box-header"><p className="section-index">08 — In the box</p><h2>Nothing extra.<br /><em>Nothing missing.</em></h2></Reveal>
-          <div className="box-layout">
-            <div className="box-list">
+          <Reveal className="box-header">
+            <p className="section-index">08 — In the box</p>
+            <h2>Nothing extra.<br /><em>Nothing missing.</em></h2>
+          </Reveal>
+
+          <div className="box-showcase">
+            <div className="box-showcase-line" aria-hidden="true" />
+            <div className="box-items">
               {box.map((item, index) => (
-                <Reveal className="box-item" key={item} delay={index * 35}><span>0{index + 1}</span><strong>{item}</strong></Reveal>
+                <Reveal className="box-card" key={item} delay={index * 55}>
+                  <div className="box-card-index">0{index + 1}</div>
+                  <div className="box-card-body">
+                    <span>INCLUDED</span>
+                    <strong>{item}</strong>
+                  </div>
+                  <div className="box-card-mark" aria-hidden="true">+</div>
+                </Reveal>
               ))}
             </div>
-            <Reveal className="box-visual" delay={100}>
-              <Image src="/nothing/assets/white_back_and_front.png" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 100vw, 44vw" className="product-image contain-image" loading="lazy" />
-            </Reveal>
           </div>
+
+          <Reveal className="box-footer-note" delay={260}>
+            <span>PHONE (4a) PRO / RETAIL PACKAGE</span>
+            <span>6 ITEMS · READY OUT OF THE BOX</span>
+          </Reveal>
         </div>
       </section>
 
