@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState, useRef, type ReactNode } from 'react';
 import MicroSlats from '../components/MicroSlats';
 
 const variants = [
@@ -71,12 +71,62 @@ function Pill({ children }: { children: ReactNode }) {
 
 export default function Home() {
   useReveal();
+
+  useEffect(() => {
+    const src = '/nothing/assets/Cough_Nothing_Phone_2_Stock_Notification-649463-mobiles24.mp3';
+    const pool = Array.from({ length: 5 }, () => {
+      const audio = new Audio(src);
+      audio.preload = 'auto';
+      audio.volume = 0.32;
+      return audio;
+    });
+    let cursor = 0;
+    const playClick = () => {
+      const audio = pool[cursor % pool.length];
+      cursor += 1;
+      audio.currentTime = 0;
+      void audio.play().catch(() => undefined);
+    };
+
+    document.addEventListener('click', playClick, true);
+    return () => {
+      document.removeEventListener('click', playClick, true);
+      pool.forEach((audio) => {
+        audio.pause();
+        audio.src = '';
+      });
+    };
+  }, []);
+
   const [variant, setVariant] = useState(0);
   const [capacity, setCapacity] = useState(0);
   const selected = variants[variant];
 
   return (
     <main>
+      <div className="global-micro-bg" aria-hidden="true">
+        <MicroSlats
+          preset="swell"
+          color="#9f9898"
+          glintColor="#ffffff"
+          backgroundColor="#090909"
+          slatWidth={10}
+          slatHeight={15}
+          gap={1}
+          roundness={1}
+          interactive
+          cursorStrength={1}
+          cursorSize={40}
+          swirl={0}
+          trail={1.2}
+          lean={0}
+          intro={false}
+          direction={129}
+          chop={0}
+          fog={0.7}
+          introDuration={0.6}
+        />
+      </div>
       <header className="site-nav">
         <div className="nav-inner">
           <a className="wordmark" href="#top" aria-label="Nothing Phone (4a) Pro">NOTHING<span>•</span></a>
@@ -91,71 +141,6 @@ export default function Home() {
       </header>
 
       <section id="top" className="hero">
-        <div className="hero-micro-bg" aria-hidden="true">
-          <MicroSlats
-            preset="swell"
-            color="#9f9898"
-            glintColor="#ffffff"
-            backgroundColor="#090909"
-            slatWidth={10}
-            slatHeight={15}
-            gap={1}
-            roundness={1}
-            interactive
-            cursorStrength={1}
-            cursorSize={40}
-            swirl={0}
-            trail={1.2}
-            lean={0}
-            intro={false}
-            direction={129}
-            chop={0}
-            fog={0.7}
-            introDuration={0.6}
-          />
-        </div>
-
-        <div className="shell hero-content">
-          <div className="hero-copy">
-            <Reveal className="hero-kicker">
-              <span>PHONE (4a) PRO</span>
-              <span>01 / 09</span>
-            </Reveal>
-            <Reveal delay={80}>
-              <h1>Built<br /><span>different.</span></h1>
-            </Reveal>
-            <Reveal delay={140}>
-              <p className="hero-lede">Metal. 140× ultra zoom. A 6.83” 144 Hz AMOLED display. Nothing OS 4.1 with Essential AI tools.</p>
-            </Reveal>
-            <Reveal delay={190} className="hero-actions">
-              <a className="button button-light" href="#buy">Shop Phone (4a) Pro</a>
-              <a className="button button-ghost" href="#camera">Explore the system <span>↘</span></a>
-            </Reveal>
-          </div>
-
-          <Reveal delay={130} className="hero-girl">
-            <div className="hero-girl-frame">
-              <Image
-                src="/nothing/assets/girl with a phone.jpg"
-                alt="Woman using a Nothing Phone"
-                fill
-                priority
-                sizes="(max-width: 760px) 92vw, 58vw"
-                className="hero-girl-image"
-              />
-              <div className="hero-girl-mask" />
-            </div>
-            <div className="hero-girl-meta">
-              <span>01 / PHONE (4a) PRO</span>
-              <strong>Nothing, in motion.</strong>
-            </div>
-          </Reveal>
-        </div>
-
-        <div className="hero-bottom shell">
-          <span>Scroll to explore</span>
-          <span>MicroSlats · Live field</span>
-        </div>
       </section>
 
       <section className="marquee" aria-label="Key specifications">
@@ -181,7 +166,7 @@ export default function Home() {
 
           <div className="camera-feature-grid">
             <Reveal className="visual-card camera-image-card">
-              <Image src="/nothing/assets/camera.jpg" alt="Phone (4a) Pro camera hardware" fill sizes="(max-width: 900px) 100vw, 55vw" className="cover-image" loading="lazy" />
+              <Image src="/nothing/assets/camera.jpg" alt="Phone (4a) Pro camera hardware" fill sizes="(max-width: 900px) 100vw, 55vw" className="original-image" loading="lazy" />
               <div className="image-overlay" />
               <div className="visual-caption"><span>PRO 3 CAMERA SYSTEM</span><span>01</span></div>
             </Reveal>
@@ -192,6 +177,27 @@ export default function Home() {
               <Reveal className="camera-detail" delay={180}><span>ENGINE</span><strong>TrueLens Engine 4</strong><p>Ultra XDR, motion photo, Portrait Optimiser, Night Mode and 12-layer AI Semantic Segmentation.</p></Reveal>
             </div>
           </div>
+
+          <Reveal className="camera-anatomy" delay={70}>
+            <div className="camera-anatomy-head">
+              <div><p className="section-index">02.1 — Hardware anatomy</p><h3>Inside the camera.</h3></div>
+              <p>Three views of the physical camera architecture and rear assembly, kept in their original proportions.</p>
+            </div>
+            <div className="camera-anatomy-grid">
+              <div className="anatomy-card anatomy-top">
+                <Image src="/nothing/assets/cama.png" alt="Upper rear camera assembly without background" fill sizes="(max-width: 900px) 100vw, 33vw" className="original-image" loading="lazy" />
+                <span>UPPER CAMERA ASSEMBLY</span>
+              </div>
+              <div className="anatomy-card">
+                <Image src="/nothing/assets/cameraview.jpeg" alt="Nothing Phone camera assembly exploded view" fill sizes="(max-width: 900px) 100vw, 33vw" className="original-image" loading="lazy" />
+                <span>CAMERA / EXPLODED VIEW</span>
+              </div>
+              <div className="anatomy-card">
+                <Image src="/nothing/assets/back phone.jpeg" alt="Nothing Phone rear assembly with battery visible" fill sizes="(max-width: 900px) 100vw, 33vw" className="original-image" loading="lazy" />
+                <span>REAR ASSEMBLY / BATTERY</span>
+              </div>
+            </div>
+          </Reveal>
 
           <Reveal className="camera-bottom-card" delay={80}>
             <div><span>VIDEO</span><strong>4K Ultra XDR</strong></div>
@@ -207,34 +213,14 @@ export default function Home() {
           <Reveal className="slats-copy">
             <p className="section-index">03 — Interface</p>
             <h2>Nothing<br /><em>stays quiet.</em></h2>
-            <p className="muted-copy">A visual language of light, motion and information. The Glyph Interface meets Nothing OS 4.1 and a focused set of Essential AI tools.</p>
-            <div className="slats-note"><span>MICROSLATS / LIVE FIELD</span><span>MOVE · PRESS · INTERACT</span></div>
+            <p className="muted-copy">The same MicroSlats surface continues through the dark parts of the page, so the field remains a real background system rather than a demo card.</p>
+            <div className="slats-note"><span>MICROSLATS / GLOBAL FIELD</span><span>MOVE · CLICK · EXPLORE</span></div>
           </Reveal>
 
-          <Reveal className="slats-demo" delay={100}>
-            <MicroSlats
-              preset="tide"
-              color="#25262a"
-              glintColor="#ffffff"
-              backgroundColor="#0a0b0d"
-              slatWidth={11}
-              slatHeight={14}
-              gap={2}
-              roundness={1}
-              speed={0.22}
-              glint={0.55}
-              contrast={1.35}
-              perspective={0.42}
-              fog={0.36}
-              interactive
-              cursorStrength={1.15}
-              cursorSize={54}
-              trail={1.5}
-              lean={0.16}
-              intro
-              introDuration={0.9}
-            />
-            <span className="slats-badge">MOVE YOUR CURSOR</span>
+          <Reveal className="slats-callout" delay={100}>
+            <span className="slats-callout-index">03 / 09</span>
+            <strong>One field.<br />Every dark surface.</strong>
+            <p>There is no second isolated canvas here. The page shares one live MicroSlats field behind its dark surfaces.</p>
           </Reveal>
         </div>
       </section>
@@ -264,6 +250,20 @@ export default function Home() {
         </div>
       </section>
 
+      <section className="section lifestyle-section">
+        <div className="shell lifestyle-grid">
+          <Reveal className="lifestyle-visual">
+            <Image src="/nothing/assets/girl with a phone.jpg" alt="Woman using a Nothing Phone (4a) Pro" fill sizes="(max-width: 820px) 100vw, 52vw" className="original-image" loading="lazy" />
+            <div className="lifestyle-label"><span>04.5 — LIFESTYLE</span><span>NOTHING, IN MOTION.</span></div>
+          </Reveal>
+          <Reveal className="lifestyle-copy" delay={100}>
+            <p className="section-index">04.5 — In use</p>
+            <h2>Designed<br /><em>to move.</em></h2>
+            <p className="muted-copy">Product photography stays in its supplied proportions, outside the hero, as part of the real-world product story.</p>
+          </Reveal>
+        </div>
+      </section>
+
       <section id="performance" className="section performance-section">
         <div className="shell">
           <Reveal className="section-intro performance-intro">
@@ -273,7 +273,7 @@ export default function Home() {
 
           <div className="performance-grid">
             <Reveal className="performance-image">
-              <Image src="/nothing/assets/matrix.jpg" alt="Nothing Phone (4a) Pro system visual" fill sizes="(max-width: 900px) 100vw, 52vw" className="cover-image" loading="lazy" />
+              <Image src="/nothing/assets/matrix.jpg" alt="Nothing Phone (4a) Pro system visual" fill sizes="(max-width: 900px) 100vw, 52vw" className="original-image" loading="lazy" />
               <div className="image-overlay dark-overlay" />
               <div className="image-label"><span>QUALCOMM SNAPDRAGON 7 GEN 4</span><span>4 NM</span></div>
             </Reveal>
@@ -294,7 +294,7 @@ export default function Home() {
           <Reveal className="battery-header"><p className="section-index">06 — Battery</p><h2>Power that<br /><em>keeps moving.</em></h2></Reveal>
           <div className="battery-grid">
             <Reveal className="battery-image">
-              <Image src="/nothing/assets/battery.jpg" alt="Nothing Phone (4a) Pro battery" fill sizes="(max-width: 900px) 100vw, 50vw" className="cover-image" loading="lazy" />
+              <Image src="/nothing/assets/battery.jpg" alt="Nothing Phone (4a) Pro battery" fill sizes="(max-width: 900px) 100vw, 50vw" className="original-image" loading="lazy" />
               <div className="image-overlay" />
               <span className="image-label single">50 W FAST CHARGING</span>
             </Reveal>
@@ -324,8 +324,8 @@ export default function Home() {
           </div>
 
           <Reveal className="spec-gallery" delay={70}>
-            <div className="spec-gallery-card"><Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="cover-image" loading="lazy" /></div>
-            <div className="spec-gallery-card"><Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="cover-image" loading="lazy" /></div>
+            <div className="spec-gallery-card"><Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" /></div>
+            <div className="spec-gallery-card"><Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="original-image" loading="lazy" /></div>
           </Reveal>
         </div>
       </section>
