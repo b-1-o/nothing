@@ -1,330 +1,400 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import Image from 'next/image';
+import { useEffect, useState, type ReactNode } from 'react';
 import MicroSlats from '../components/MicroSlats';
 
-const BASE = process.env.NEXT_PUBLIC_BASE || '/nothing';
-
 const variants = [
-  { name: 'Silver', code: '#dfe1e4', price: '$499' },
-  { name: 'Black', code: '#15171a', price: '$499' },
-  { name: 'Pink', code: '#e6bfc5', price: '$499' }
+  { name: 'Silver', price: '$499', note: 'Default finish' },
+  { name: 'Black', price: '$499', note: 'Deep black finish' },
+  { name: 'Pink', price: '$499', note: 'Soft pink finish' }
 ];
 
-const tiers = ['8 + 128 GB', '8 + 256 GB', '12 + 256 GB'];
-
-const gallery = [
-  { src: `${BASE}/assets/81kw6cCXt8L._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro front' },
-  { src: `${BASE}/assets/71MayknvFUL._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro back Silver' },
-  { src: `${BASE}/assets/71SCj2dl0aL._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro camera system' },
-  { src: `${BASE}/assets/71n5DFT6MnL._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro side profile' },
-  { src: `${BASE}/assets/81wZGJM0zEL._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro in hand' },
-  { src: `${BASE}/assets/71c-VHZLtrL._AC_SL1500_.jpg`, alt: 'Phone (4a) Pro detail' }
-];
+const capacities = ['8GB + 128GB', '8GB + 256GB', '12GB + 256GB'];
 
 const specs = [
-  ['Display', '6.83” flexible AMOLED', '1260 × 2800 · 450 PPI · 10-bit · 144 Hz · Gorilla Glass 7i'],
-  ['Brightness', '5000 nits peak', '1600 outdoor · 800 typical · 2160 Hz PWM'],
-  ['Processor', 'Snapdragon 7 Gen 4', '4 nm · Kryo 8-core up to 2.8 GHz · Adreno 722 · Hexagon NPU'],
-  ['Main camera', '50 MP · f/1.88 · OIS & EIS', '1/1.56” · 2×2 OCL PDAF · 2× in-sensor zoom · ISR'],
-  ['Periscope', '50 MP · f/2.88 · 3.5× optical', '7× in-sensor · 140× ultra zoom · OIS & EIS'],
-  ['Ultra-wide', 'f/2.2 · 120° FOV', '1/4” sensor'],
-  ['Front', '32 MP · f/2.2 · 89°', '1/3.44” sensor'],
-  ['Battery', '5,080 mAh', '50 W · 7.5 W reverse · PPS / PD / QC'],
-  ['Audio', 'Dual stereo speakers', '2 high-definition mics'],
-  ['Connectivity', 'Wi‑Fi 6 · BT 5.4 · NFC · eSIM', '5G · Dual Nano-SIM'],
-  ['Build', 'IP65 · 210 g', '163.6 × 76.6 × 7.9 mm · aluminium unibody'],
-  ['Software', 'Nothing OS 4.1 · Android 16', '3 OS updates · 6 years security']
+  ['Dimensions', '163.6 × 76.6 × 7.9 mm', '210 g'],
+  ['Display', '6.83” flexible AMOLED', '1260 × 2800 · 450 PPI · 10-bit'],
+  ['Refresh', 'Adaptive 144 Hz', 'Up to 2,500 Hz touch sampling · 2160 Hz PWM'],
+  ['Brightness', '5000 nits peak', '1600 nits outdoor · 800 nits typical'],
+  ['Processor', 'Snapdragon 7 Gen 4', '4 nm TSMC · Kryo 8-core · up to 2.8 GHz'],
+  ['Memory', 'LPDDR5x + UFS 3.1', '8GB / 12GB RAM · 128GB / 256GB storage'],
+  ['Main camera', '50 MP · f/1.88', '1/1.56” · OIS + EIS · 2× in-sensor zoom'],
+  ['Periscope', '50 MP · f/2.88', '3.5× optical · 7× in-sensor · 140× ultra zoom'],
+  ['Ultra-wide', '120° field of view', 'f/2.2 · 1/4” sensor'],
+  ['Front camera', '32 MP · f/2.2', '89° field of view · 1/3.44” sensor'],
+  ['Battery', '5,080 mAh', '50 W wired · 7.5 W reverse wired'],
+  ['Connectivity', 'Wi‑Fi 6 · Bluetooth 5.4', '5G · NFC · eSIM · Dual Nano-SIM'],
+  ['Durability', 'IP65', '25 cm immersion up to 20 minutes'],
+  ['Software', 'Nothing OS 4.1 · Android 16', '3 Android updates · 6 years security patches']
 ];
 
 const box = [
   'Nothing Phone (4a) Pro',
   'Nothing Cable (C-C) 100 cm',
-  'Screen protector (pre-applied)',
+  'Screen protector — pre-applied',
   'Phone (4a) Pro Case',
   'SIM tray ejector tool',
   'Safety information & warranty card'
 ];
 
-function PhoneVisual({ color }: { color: string }) {
+function useReveal() {
+  useEffect(() => {
+    const nodes = document.querySelectorAll<HTMLElement>('[data-reveal]');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -8% 0px' }
+    );
+    nodes.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
+  }, []);
+}
+
+function Reveal({ children, className = '', delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
   return (
-    <div className="phone-wrap" style={{ ['--device' as string]: color }}>
-      <div className="phone-shadow" />
-      <div className="phone">
-        <div className="camera-rail">
-          <span className="lens" />
-          <span className="lens" />
-          <span className="lens" />
-          <span className="camera-led" />
-        </div>
-        <div className="glyph glyph-top" />
-        <div className="glyph glyph-mid" />
-        <div className="glyph glyph-bottom" />
-        <div className="brand">nothing</div>
-      </div>
+    <div data-reveal className={className} style={{ ['--reveal-delay' as string]: delay + 'ms' }}>
+      {children}
     </div>
   );
 }
 
+function Pill({ children }: { children: ReactNode }) {
+  return <span className="pill">{children}</span>;
+}
+
 export default function Home() {
+  useReveal();
   const [variant, setVariant] = useState(0);
-  const [tier, setTier] = useState(0);
+  const [capacity, setCapacity] = useState(0);
   const selected = variants[variant];
-  const capacity = useMemo(() => tiers[tier], [tier]);
 
   return (
     <main>
-      <header className="nav shell">
-        <a className="logo" href="#top">
-          NOTHING<span>°</span>
-        </a>
-        <nav>
-          <a href="#features">Features</a>
-          <a href="#gallery">Gallery</a>
-          <a href="#specs">Specs</a>
-          <a href="#buy">Buy</a>
-        </nav>
-        <a className="menu" href="#buy">
-          01
-        </a>
+      <header className="site-nav">
+        <div className="nav-inner">
+          <a className="wordmark" href="#top" aria-label="Nothing Phone (4a) Pro">NOTHING<span>•</span></a>
+          <nav className="desktop-nav" aria-label="Primary navigation">
+            <a href="#camera">Camera</a>
+            <a href="#display">Display</a>
+            <a href="#performance">Performance</a>
+            <a href="#specs">Specs</a>
+          </nav>
+          <a className="nav-buy" href="#buy">Buy</a>
+        </div>
       </header>
 
       <section id="top" className="hero">
-        <div className="hero-slats">
+        <div className="hero-bg">
+          <Image
+            src="/nothing/assets/beckground.jpg"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className="cover-image hero-bg-image"
+          />
+          <div className="hero-vignette" />
+          <div className="hero-grain" />
+        </div>
+
+        <div className="hero-slats" aria-hidden="true">
           <MicroSlats
-            color="#9a9a9a"
-            glintColor="#f5f5f5"
-            backgroundColor="#050506"
+            preset="swell"
+            color="#8f9196"
+            glintColor="#ffffff"
+            backgroundColor="transparent"
+            slatWidth={10}
+            slatHeight={11}
+            gap={2}
+            roundness={0.8}
+            speed={0.28}
+            glint={0.58}
+            contrast={1.15}
+            perspective={0.72}
+            fog={0.78}
             interactive
+            cursorStrength={0.7}
+            cursorSize={46}
+            trail={1.1}
+            lean={0.12}
+            intro
+            introDuration={1.1}
           />
         </div>
-        <div className="hero-copy shell">
-          <p className="eyebrow">PHONE (4a) PRO</p>
-          <h1>
-            Built
-            <br />
-            <em>different.</em>
-          </h1>
-          <p className="lede">
-            World’s first 140× ultra zoom*. Metal unibody. Pro 3 camera system with Sony sensor.
-            Nothing OS 4.1 with Essential AI tools.
-          </p>
-          <div className="hero-actions">
-            <a className="button button-light" href="#buy">
-              Buy Phone (4a) Pro
-            </a>
-            <a className="text-link" href="#specs">
-              Explore specs ↗
-            </a>
+
+        <div className="shell hero-content">
+          <div className="hero-copy">
+            <Reveal className="hero-kicker">
+              <span>PHONE (4a) PRO</span>
+              <span>01 / 09</span>
+            </Reveal>
+            <Reveal delay={80}>
+              <h1>Built<br /><span>different.</span></h1>
+            </Reveal>
+            <Reveal delay={140}>
+              <p className="hero-lede">Metal. 140× ultra zoom. A 6.83” 144 Hz AMOLED display. Nothing OS 4.1 with Essential AI tools.</p>
+            </Reveal>
+            <Reveal delay={190} className="hero-actions">
+              <a className="button button-light" href="#buy">Shop Phone (4a) Pro</a>
+              <a className="button button-ghost" href="#camera">Explore the system <span>↘</span></a>
+            </Reveal>
           </div>
+
+          <Reveal delay={220} className="hero-product">
+            <div className="hero-device-glow" />
+            <div className="hero-device">
+              <Image
+                src="/nothing/assets/phone back and front.jpg"
+                alt="Nothing Phone (4a) Pro front and back"
+                fill
+                priority
+                sizes="(max-width: 760px) 72vw, 44vw"
+                className="product-image contain-image"
+              />
+            </div>
+            <div className="hero-product-label">
+              <span>{selected.name}</span><strong>140×</strong><small>ultra zoom</small>
+            </div>
+          </Reveal>
         </div>
-        <div className="hero-product shell">
-          <PhoneVisual color={selected.code} />
-          <div className="hero-meta">
-            <span>03 / 03 camera system</span>
-            <span>140× ultra zoom*</span>
-          </div>
+
+        <div className="hero-bottom shell">
+          <span>Scroll to explore</span>
+          <span>Nothing · 2026</span>
         </div>
       </section>
 
-      <section id="features" className="intro shell section-pad">
-        <div>
-          <span className="section-kicker">01 — Photography</span>
-          <h2>
-            Zoom further.
-            <br />
-            See more.
-          </h2>
-        </div>
-        <div className="feature-copy">
-          <p>
-            Three cameras. Sony sensor. TrueLens Engine 4. Ultra XDR. From street shots to long-range
-            frames, detail stays intact. 3.5× optical, 7× in-sensor, 140× ultra zoom.
-          </p>
-          <div className="stat-row">
-            <div>
-              <strong>50 MP</strong>
-              <span>Main + periscope</span>
-            </div>
-            <div>
-              <strong>3.5×</strong>
-              <span>Optical zoom</span>
-            </div>
-            <div>
-              <strong>140×</strong>
-              <span>Ultra zoom</span>
-            </div>
-          </div>
+      <section className="marquee" aria-label="Key specifications">
+        <div className="marquee-track">
+          <span>03 cameras</span><i>·</i><span>Sony sensor</span><i>·</i><span>140× zoom</span><i>·</i>
+          <span>144 Hz AMOLED</span><i>·</i><span>5000 nits</span><i>·</i><span>50 W charging</span><i>·</i>
+          <span>Nothing OS 4.1</span><i>·</i><span>03 cameras</span><i>·</i>
         </div>
       </section>
 
-      <section className="camera-band">
-        <div className="shell camera-grid">
-          <div className="camera-orbit">
-            <div className="orbit-line orbit-one" />
-            <div className="orbit-line orbit-two" />
-            <div className="camera-core">
-              <span>4a</span>
-            </div>
-          </div>
-          <div>
-            <span className="section-kicker">02 — Pro 3 camera system</span>
-            <h2>
-              Rapid shutter.
-              <br />
-              Steady detail.
-            </h2>
-            <p>
-              OIS + EIS, PDAF, 2× in-sensor zoom, Night Mode and AI Semantic Segmentation (12 layers)
-              built into the default experience. 4K Ultra XDR video at 30 fps.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <section id="gallery" className="gallery-section section-pad">
+      <section id="camera" className="section section-dark">
         <div className="shell">
-          <div className="gallery-head">
-            <span className="section-kicker">03 — Gallery</span>
-            <h2>
-              It’s metal
-              <br />
-              now.
-            </h2>
+          <Reveal className="section-intro">
+            <div>
+              <p className="section-index">02 — Camera</p>
+              <h2>Get closer.<br /><em>Go further.</em></h2>
+            </div>
+            <div className="section-intro-copy">
+              <p>Three cameras tuned around a Sony sensor, with computational imaging doing the work between the lens and the final frame.</p>
+              <div className="chip-row"><Pill>50 MP main</Pill><Pill>50 MP periscope</Pill><Pill>120° ultra-wide</Pill></div>
+            </div>
+          </Reveal>
+
+          <div className="camera-feature-grid">
+            <Reveal className="visual-card camera-image-card">
+              <Image src="/nothing/assets/camera.jpg" alt="Phone (4a) Pro camera hardware" fill sizes="(max-width: 900px) 100vw, 55vw" className="cover-image" loading="lazy" />
+              <div className="image-overlay" />
+              <div className="visual-caption"><span>PRO 3 CAMERA SYSTEM</span><span>01</span></div>
+            </Reveal>
+
+            <div className="camera-stats">
+              <Reveal className="big-stat" delay={80}><strong>140×</strong><span>ultra zoom</span></Reveal>
+              <Reveal className="camera-detail" delay={130}><span>PERISCOPE</span><strong>3.5× optical</strong><p>7× in-sensor zoom, OIS + EIS, PDAF and up to 140× ultra zoom.</p></Reveal>
+              <Reveal className="camera-detail" delay={180}><span>ENGINE</span><strong>TrueLens Engine 4</strong><p>Ultra XDR, motion photo, Portrait Optimiser, Night Mode and 12-layer AI Semantic Segmentation.</p></Reveal>
+            </div>
           </div>
-          <div className="gallery-grid">
-            {gallery.map((img, i) => (
-              <figure key={img.src} className={`gallery-item item-${i % 3}`}>
-                <img src={img.src} alt={img.alt} loading={i < 2 ? 'eager' : 'lazy'} decoding="async" />
-              </figure>
+
+          <Reveal className="camera-bottom-card" delay={80}>
+            <div><span>VIDEO</span><strong>4K Ultra XDR</strong></div>
+            <div><span>FRAME RATE</span><strong>30 FPS</strong></div>
+            <div><span>SLO‑MO</span><strong>1080p · 120 FPS</strong></div>
+            <div><span>FRONT</span><strong>32 MP</strong></div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section className="section slats-section">
+        <div className="shell slats-layout">
+          <Reveal className="slats-copy">
+            <p className="section-index">03 — Interface</p>
+            <h2>Nothing<br /><em>stays quiet.</em></h2>
+            <p className="muted-copy">A visual language of light, motion and information. The Glyph Interface meets Nothing OS 4.1 and a focused set of Essential AI tools.</p>
+            <div className="slats-note"><span>MICROSLATS / LIVE FIELD</span><span>MOVE · PRESS · INTERACT</span></div>
+          </Reveal>
+
+          <Reveal className="slats-demo" delay={100}>
+            <MicroSlats
+              preset="tide"
+              color="#25262a"
+              glintColor="#ffffff"
+              backgroundColor="#0a0b0d"
+              slatWidth={11}
+              slatHeight={14}
+              gap={2}
+              roundness={1}
+              speed={0.22}
+              glint={0.55}
+              contrast={1.35}
+              perspective={0.42}
+              fog={0.36}
+              interactive
+              cursorStrength={1.15}
+              cursorSize={54}
+              trail={1.5}
+              lean={0.16}
+              intro
+              introDuration={0.9}
+            />
+            <span className="slats-badge">MOVE YOUR CURSOR</span>
+          </Reveal>
+        </div>
+      </section>
+
+      <section id="display" className="section display-section">
+        <div className="shell display-layout">
+          <Reveal className="display-copy">
+            <p className="section-index">04 — Display</p>
+            <h2>Big, bright,<br /><em>effortless.</em></h2>
+            <p className="muted-copy">6.83” flexible AMOLED. 10-bit colour. Adaptive 144 Hz. High touch response built for scroll, games and everyday motion.</p>
+            <div className="display-metrics">
+              <div><strong>5000</strong><span>nits peak</span></div>
+              <div><strong>144</strong><span>Hz adaptive</span></div>
+              <div><strong>10-bit</strong><span>1.07B colours</span></div>
+            </div>
+          </Reveal>
+          <Reveal className="display-visual" delay={120}>
+            <div className="screen-shell">
+              <div className="screen-reflection" />
+              <div className="screen-core">
+                <span className="screen-number">144</span>
+                <span className="screen-unit">HZ</span>
+                <span className="screen-sub">ADAPTIVE REFRESH</span>
+              </div>
+            </div>
+          </Reveal>
+        </div>
+      </section>
+
+      <section id="performance" className="section performance-section">
+        <div className="shell">
+          <Reveal className="section-intro performance-intro">
+            <div><p className="section-index">05 — Performance</p><h2>Fast where<br /><em>it counts.</em></h2></div>
+            <div className="section-intro-copy"><p>Snapdragon 7 Gen 4, LPDDR5x and UFS 3.1 keep the everyday stack responsive without turning the interface into noise.</p></div>
+          </Reveal>
+
+          <div className="performance-grid">
+            <Reveal className="performance-image">
+              <Image src="/nothing/assets/matrix.jpg" alt="Nothing Phone (4a) Pro system visual" fill sizes="(max-width: 900px) 100vw, 52vw" className="cover-image" loading="lazy" />
+              <div className="image-overlay dark-overlay" />
+              <div className="image-label"><span>QUALCOMM SNAPDRAGON 7 GEN 4</span><span>4 NM</span></div>
+            </Reveal>
+
+            <div className="performance-list">
+              <Reveal className="perf-row"><span>CPU</span><strong>8-core Kryo</strong><small>Up to 2.8 GHz</small></Reveal>
+              <Reveal className="perf-row" delay={60}><span>GPU</span><strong>Adreno 722</strong><small>Qualcomm graphics</small></Reveal>
+              <Reveal className="perf-row" delay={110}><span>NPU</span><strong>Hexagon NPU</strong><small>Qualcomm AI Engine</small></Reveal>
+              <Reveal className="perf-row" delay={160}><span>STORAGE</span><strong>UFS 3.1</strong><small>Up to 256 GB</small></Reveal>
+              <Reveal className="perf-row" delay={210}><span>MEMORY</span><strong>LPDDR5x</strong><small>Up to 12 GB RAM</small></Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="section battery-section">
+        <div className="shell">
+          <Reveal className="battery-header"><p className="section-index">06 — Battery</p><h2>Power that<br /><em>keeps moving.</em></h2></Reveal>
+          <div className="battery-grid">
+            <Reveal className="battery-image">
+              <Image src="/nothing/assets/battery.jpg" alt="Nothing Phone (4a) Pro battery" fill sizes="(max-width: 900px) 100vw, 50vw" className="cover-image" loading="lazy" />
+              <div className="image-overlay" />
+              <span className="image-label single">50 W FAST CHARGING</span>
+            </Reveal>
+            <div className="battery-facts">
+              <Reveal className="battery-number"><strong>5,080</strong><span>mAh</span></Reveal>
+              <Reveal className="battery-rule" delay={70}><span>CHARGING</span><strong>50 W</strong><small>PPS / PD / QC / UFCS</small></Reveal>
+              <Reveal className="battery-rule" delay={120}><span>REVERSE</span><strong>7.5 W</strong><small>Reverse wired charging</small></Reveal>
+              <Reveal className="battery-rule" delay={170}><span>INDIA</span><strong>5,400 mAh</strong><small>India-only configuration</small></Reveal>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="specs" className="section specs-section">
+        <div className="shell">
+          <Reveal className="specs-header">
+            <div><p className="section-index">07 — Specs</p><h2>The numbers<br /><em>behind the object.</em></h2></div>
+            <p className="muted-copy">A compact technical view of the Phone (4a) Pro, using the supplied product specification.</p>
+          </Reveal>
+
+          <div className="specs-table">
+            {specs.map(([label, main, detail], index) => (
+              <Reveal className="spec-row" key={label} delay={Math.min(index * 25, 250)}>
+                <span>{label}</span><strong>{main}</strong><small>{detail}</small>
+              </Reveal>
             ))}
           </div>
+
+          <Reveal className="spec-gallery" delay={70}>
+            <div className="spec-gallery-card"><Image src="/nothing/assets/specs.jpg" alt="Phone (4a) Pro specifications" fill sizes="(max-width: 720px) 100vw, 50vw" className="cover-image" loading="lazy" /></div>
+            <div className="spec-gallery-card"><Image src="/nothing/assets/specs1.jpg" alt="Phone (4a) Pro specification detail" fill sizes="(max-width: 720px) 100vw, 50vw" className="cover-image" loading="lazy" /></div>
+          </Reveal>
         </div>
       </section>
 
-      <section className="display-section section-pad">
-        <div className="shell display-inner">
-          <div className="display-copy">
-            <span className="section-kicker">04 — Display</span>
-            <h2>
-              144 Hz.
-              <br />
-              No dead weight.
-            </h2>
-            <p>
-              6.83” flexible AMOLED, 10-bit colour, 1.07 billion colours, up to 2,500 Hz touch
-              sampling and 5,000 nits peak. Adaptive 144 Hz. Corning® Gorilla® Glass 7i.
-            </p>
-          </div>
-          <div className="display-frame">
-            <div className="display-screen">
-              <div className="display-orb" />
-              <div className="display-grid" />
-              <span>144</span>
+      <section className="section box-section">
+        <div className="shell">
+          <Reveal className="box-header"><p className="section-index">08 — In the box</p><h2>Nothing extra.<br /><em>Nothing missing.</em></h2></Reveal>
+          <div className="box-layout">
+            <div className="box-list">
+              {box.map((item, index) => (
+                <Reveal className="box-item" key={item} delay={index * 35}><span>0{index + 1}</span><strong>{item}</strong></Reveal>
+              ))}
             </div>
+            <Reveal className="box-visual" delay={100}>
+              <Image src="/nothing/assets/phone back and front.jpg" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 100vw, 44vw" className="product-image contain-image" loading="lazy" />
+            </Reveal>
           </div>
         </div>
-      </section>
-
-      <section id="specs" className="specs shell section-pad">
-        <div className="specs-head">
-          <div>
-            <span className="section-kicker">05 — Specs</span>
-            <h2>The numbers.</h2>
-          </div>
-          <p>Everything the Phone (4a) Pro ships with, laid out without the noise.</p>
-        </div>
-        <div className="spec-table">
-          {specs.map(([label, main, detail]) => (
-            <div className="spec-row" key={label}>
-              <span>{label}</span>
-              <strong>{main}</strong>
-              <small>{detail}</small>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      <section className="inbox shell section-pad">
-        <span className="section-kicker">06 — In the box</span>
-        <h2>Everything you need.</h2>
-        <ul className="box-list">
-          {box.map((item) => (
-            <li key={item}>{item}</li>
-          ))}
-        </ul>
       </section>
 
       <section id="buy" className="buy-section">
-        <div className="shell buy-grid">
-          <div>
-            <span className="section-kicker">07 — Choose yours</span>
-            <h2>
-              Make it
-              <br />
-              <em>yours.</em>
-            </h2>
-            <p>Phone (4a) Pro. Available in Silver, Black and Pink. From $499.</p>
-            <div className="swatches">
-              {variants.map((v, i) => (
-                <button
-                  key={v.name}
-                  type="button"
-                  className={i === variant ? 'swatch active' : 'swatch'}
-                  onClick={() => setVariant(i)}
-                  aria-label={v.name}
-                >
-                  <span style={{ background: v.code }} />
-                  {v.name}
+        <div className="shell buy-layout">
+          <Reveal className="buy-copy">
+            <p className="section-index">09 — Choose yours</p>
+            <h2>Make it<br /><em>yours.</em></h2>
+            <p>Phone (4a) Pro starts at $499. Choose a finish, then choose the memory configuration.</p>
+            <div className="swatches" role="radiogroup" aria-label="Colours">
+              {variants.map((item, index) => (
+                <button key={item.name} type="button" className={'swatch ' + (variant === index ? 'active' : '')} onClick={() => setVariant(index)} aria-pressed={variant === index}>
+                  <span className={'swatch-dot swatch-' + item.name.toLowerCase()} />{item.name}
                 </button>
               ))}
             </div>
-          </div>
-          <div className="buy-card">
-            <div className="mini-phone">
-              <PhoneVisual color={selected.code} />
+          </Reveal>
+
+          <Reveal className="buy-card" delay={100}>
+            <div className="buy-image"><Image src="/nothing/assets/phone back and front.jpg" alt="Nothing Phone (4a) Pro" fill sizes="(max-width: 900px) 72vw, 30vw" className="product-image contain-image" loading="lazy" /></div>
+            <div className="buy-product-title">
+              <div><span>PHONE (4a) PRO</span><strong>{selected.name}</strong></div>
+              <span className="buy-price">{selected.price}</span>
             </div>
-            <div className="buy-title">
-              <span>PHONE (4a) PRO</span>
-              <strong>{selected.name}</strong>
-            </div>
-            <div className="tier-tabs">
-              {tiers.map((t, i) => (
-                <button
-                  key={t}
-                  type="button"
-                  className={i === tier ? 'active' : ''}
-                  onClick={() => setTier(i)}
-                >
-                  {t}
-                </button>
+            <p className="buy-note">{selected.note}</p>
+            <div className="capacity-grid" role="radiogroup" aria-label="Storage">
+              {capacities.map((item, index) => (
+                <button key={item} type="button" className={capacity === index ? 'selected' : ''} onClick={() => setCapacity(index)} aria-pressed={capacity === index}>{item}</button>
               ))}
             </div>
-            <div className="buy-bottom">
-              <div>
-                <span>Selected</span>
-                <strong>
-                  {selected.name} · {capacity}
-                </strong>
-              </div>
-              <b>{selected.price}</b>
-            </div>
-            <a
-              className="cart"
-              href="https://us.nothing.tech/products/phone-4a-pro"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Add to bag <span>↗</span>
-            </a>
-          </div>
+            <div className="buy-summary"><span>{selected.name} · {capacities[capacity]}</span><strong>{selected.price}</strong></div>
+            <a className="buy-cta" href="https://us.nothing.tech/products/phone-4a-pro" target="_blank" rel="noopener noreferrer">Add to bag <span>↗</span></a>
+            <small className="buy-disclaimer">External purchase link · pricing and availability may change.</small>
+          </Reveal>
         </div>
       </section>
 
-      <footer className="footer shell">
-        <span>Nothing — Phone (4a) Pro</span>
-        <span>Built different.</span>
-        <span>© 2026</span>
+      <footer className="footer">
+        <div className="shell footer-inner"><span>NOTHING • PHONE (4a) PRO</span><span>Metal. Light. Motion.</span><span>© 2026</span></div>
       </footer>
     </main>
   );
