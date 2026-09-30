@@ -19,7 +19,7 @@
   .hero-actions { display: flex; flex-wrap: wrap; gap: 8px; }
   .hero-actions .button { min-height: 42px; padding: 0 13px; font-size: 10px; }
   .hero-actions .button-ghost span { display: none !important; }
-  .hero-product { position: absolute !important; z-index: 2; left: calc(50% - 64px) !important; right: auto !important; top: 340px !important; bottom: auto !important; width: min(520px, 124vw) !important; height: 450px !important; transform: translateX(-50%) !important; }
+  .hero-product { position: absolute !important; z-index: 2; left: calc(50% - 144px) !important; right: auto !important; top: 340px !important; bottom: auto !important; width: min(520px, 124vw) !important; height: 450px !important; transform: translateX(-50%) !important; }
   .hero-base-image { object-fit: contain !important; object-position: center !important; width: 100% !important; height: 100% !important; }
   .hero-product-glow { transform: scale(.72); }
   .hero-product-label { left: 16px !important; right: 16px !important; bottom: 6px !important; }
@@ -113,7 +113,7 @@
   .shell, .nav-inner, .buy-shell { width: calc(100% - 22px); }
   .hero { min-height: 720px; }
   .hero-content { min-height: 685px; padding-top: 96px; }
-  .hero-product { top: 340px !important; left: calc(50% - 64px) !important; width: 124vw !important; height: 390px !important; }
+  .hero-product { top: 340px !important; left: calc(50% - 144px) !important; width: 124vw !important; height: 390px !important; }
   .hero-copy { max-width: 305px; }
   .hero-lede { font-size: 12px; max-width: 270px; }
   .camera-image-card, .lifestyle-visual, .performance-image, .battery-image { min-height: 330px; }
