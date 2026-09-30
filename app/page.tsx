@@ -94,10 +94,10 @@ export default function Home() {
     const squiggleIndex = { value: 0 };
     const onDocumentClick = (event: MouseEvent) => {
       if ((event.target as Element | null)?.closest('[data-buy-sound-zone]')) return;
-      playFrom(coughPool, coughIndex);
+      playFrom(squigglePool, squiggleIndex);
     };
     const buyZone = document.querySelector<HTMLElement>('[data-buy-sound-zone]');
-    const onBuyClick = () => playFrom(squigglePool, squiggleIndex);
+    const onBuyClick = () => playFrom(coughPool, coughIndex);
 
     document.addEventListener('click', onDocumentClick, true);
     buyZone?.addEventListener('click', onBuyClick);
