@@ -113,7 +113,6 @@ export default function Home() {
             fog={0.7}
             introDuration={0.6}
           />
-          <div className="hero-micro-shade" />
         </div>
 
         <div className="shell hero-content">
