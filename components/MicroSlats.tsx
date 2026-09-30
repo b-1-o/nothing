@@ -320,5 +320,5 @@ export default function MicroSlats({
     paused
   ]);
 
-  return <canvas ref={ref} className={'micro-slats ' + className}.trim() aria-hidden="true" />;
+  return <canvas ref={ref} className={('micro-slats ' + className).trim()} aria-hidden="true" />;
 }
