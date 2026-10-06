@@ -1,17 +1,14 @@
 # Nothing — Product Experience
 
-![Preview](./assets/preview.jpeg)
-
 An immersive product website inspired by Nothing's industrial design language. Built as a polished frontend concept focusing on product presentation, typography, responsive layouts, motion, and WebGL-based visual effects.
 
 ## Live Demo
-🔗 [b-1-o.github.io/nothing](https://b-1-o.github.io/nothing/)
+ [b-1-o.github.io/nothing](https://b-1-o.github.io/nothing/)
 
-## Preview
+
 ![Preview](./assets/preview.jpeg)
 
-![Demo](./assets/demo.gif)
-*(GIF will be added)*
+
 
 ## Features
 - Product-focused visual system
